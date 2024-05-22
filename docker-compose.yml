@@ -1,0 +1,50 @@
+version: '3'
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:11-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=app
+    command: ["postgres", "-c", "log_statement=all"]
+    volumes:
+      - postgres-vol:/var/lib/postgresql/data
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - test-task-main
+
+  test-task:
+    container_name: app
+    depends_on:
+      - postgres
+    environment:
+      # App
+      - APP_TIMEOUT=60s
+      - APP_PORT=8080
+      - APP_ENV=dev
+      # Postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB_NAME=app
+      - POSTGRES_HOST=postgres  # Use service name here
+      - POSTGRES_PORT=5432
+      - POSTGRES_SSL_MODE=disable
+      - POSTGRES_TIMEOUT=20s
+    build:
+      context: ./
+      dockerfile: build/Dockerfile
+    ports:
+      - "8080:8080"
+    restart: always
+    networks:
+      - test-task-main
+
+networks:
+  test-task-main:
+    driver: bridge
+
+volumes:
+  postgres-vol:

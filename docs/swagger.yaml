@@ -1,0 +1,300 @@
+basePath: /api/v1
+definitions:
+  data.CreateAccountRequest:
+    properties:
+      balance:
+        type: number
+      name:
+        type: string
+    type: object
+  data.CreateAccountResponse:
+    properties:
+      account:
+        $ref: '#/definitions/models.Account'
+    type: object
+  data.CreateTransactionRequest:
+    properties:
+      account_id:
+        type: string
+      account2_id:
+        type: string
+      group_type:
+        type: string
+      value:
+        type: number
+    type: object
+  data.CreateTransactionResponse:
+    properties:
+      transaction:
+        $ref: '#/definitions/models.Transaction'
+    type: object
+  data.DeleteAccountResponse:
+    type: object
+  data.DeleteTransactionResponse:
+    type: object
+  data.GetAccountByIDResponse:
+    properties:
+      account:
+        $ref: '#/definitions/models.Account'
+    type: object
+  data.GetAllAccountsResponse:
+    properties:
+      accounts:
+        items:
+          $ref: '#/definitions/models.Account'
+        type: array
+    type: object
+  data.GetAllTransactionsByAccountIDResponse:
+    properties:
+      transactions:
+        items:
+          $ref: '#/definitions/models.Transaction'
+        type: array
+    type: object
+  data.GetTransactionByIDResponse:
+    properties:
+      transaction:
+        $ref: '#/definitions/models.Transaction'
+    type: object
+  data.UpdateAccountRequest:
+    properties:
+      balance:
+        type: number
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  data.UpdateAccountResponse:
+    properties:
+      account:
+        $ref: '#/definitions/models.Account'
+    type: object
+  models.Account:
+    properties:
+      balance:
+        type: number
+      created_at:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.Transaction:
+    properties:
+      account_id:
+        type: string
+      account2_id:
+        type: string
+      created_at:
+        type: string
+      group_type:
+        type: string
+      id:
+        type: string
+      updated_at:
+        type: string
+      value:
+        type: number
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server celler server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API
+  version: "1.0"
+paths:
+  /account:
+    get:
+      description: Get all accounts
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/data.GetAllAccountsResponse'
+      summary: Get all accounts
+      tags:
+      - account
+    post:
+      consumes:
+      - application/json
+      description: Create account
+      parameters:
+      - description: Create account
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/data.CreateAccountRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/data.CreateAccountResponse'
+      summary: Create account
+      tags:
+      - account
+  /account/{id}:
+    delete:
+      description: Delete account
+      parameters:
+      - description: Account ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/data.DeleteAccountResponse'
+      summary: Delete account
+      tags:
+      - account
+    get:
+      description: Get account by ID
+      parameters:
+      - description: Account ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/data.GetAccountByIDResponse'
+      summary: Get account by ID
+      tags:
+      - account
+    put:
+      consumes:
+      - application/json
+      description: Update account
+      parameters:
+      - description: Account ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update account
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/data.UpdateAccountRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/data.UpdateAccountResponse'
+      summary: Update account
+      tags:
+      - account
+  /transaction:
+    post:
+      consumes:
+      - application/json
+      description: Create transaction
+      parameters:
+      - description: Create transaction
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/data.CreateTransactionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/data.CreateTransactionResponse'
+      summary: Create transaction
+      tags:
+      - transaction
+  /transaction/{id}:
+    delete:
+      description: Delete transaction
+      parameters:
+      - description: Transaction ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/data.DeleteTransactionResponse'
+      summary: Delete transaction
+      tags:
+      - transaction
+    get:
+      description: Get transaction by ID
+      parameters:
+      - description: Transaction ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/data.GetTransactionByIDResponse'
+      summary: Get transaction by ID
+      tags:
+      - transaction
+  /transaction/account/{account_id}:
+    get:
+      description: Get all transactions by account ID
+      parameters:
+      - description: Account ID
+        in: path
+        name: account_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/data.GetAllTransactionsByAccountIDResponse'
+      summary: Get all transactions by account ID
+      tags:
+      - transaction
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
